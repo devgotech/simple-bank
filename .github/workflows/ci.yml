@@ -20,7 +20,7 @@ jobs:
       id: go
 
     - name: checkout code into the Go moudule directory 
-      uses: actions/checkout@v5
+      uses: actions/checkout@v4
       
     - name: Test
       run: make test
