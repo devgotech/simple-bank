@@ -21,6 +21,11 @@ jobs:
 
     - name: checkout code into the Go moudule directory 
       uses: actions/checkout@v4
+      
+    - name: Install Go dependencies
+      run: |
+        go mod tidy
+        go mod download
 
     - name: Test
       run: make test
