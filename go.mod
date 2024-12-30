@@ -1,6 +1,6 @@
 module github.com/devgotech/simple-bank
 
-go 1.23.1
+go 1.23
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0
