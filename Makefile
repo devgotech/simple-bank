@@ -13,6 +13,18 @@ migrateup:
 migratedown:
 	migrate -path db/migration -database "postgresql://root:7090@localhost:5432/simple_bank?sslmode=disable" -verbose down
 
+migrateup1:
+	migrate -path db/migration -database "postgresql://root:7090@localhost:5432/simple_bank?sslmode=disable" -verbose up 1
+
+migratedown1:
+	migrate -path db/migration -database "postgresql://root:7090@localhost:5432/simple_bank?sslmode=disable" -verbose down 1
+
+dockerstart:
+	docker start postgres12
+
+dockerstop:
+	docker stop postgres12
+
 sqlc:
 	sqlc generate
 
@@ -21,7 +33,17 @@ test:
 
 server:
 	go run main.go
+	
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/devgotech/simple-bank/db/sqlc Store
 
-.PHONY: postres createdb dropdb migrateup migratedown sqlc test server	mock
+create-migration:
+	@if [ -n "$(name)" ]; then \
+		migrate create -ext sql -dir db/migrations -seq $(name); \
+	else \
+		echo "Error: Missing 'name' variable" >&2; \
+		echo "Usage: make create-migration name=\"<NAME_OF_MIGRATION_FILE>\"" >&2; \
+		exit 1; \
+	fi
+
+	.PHONY: postgres createdb dropdb migrateup migratedown migratedown1 migrateup1 sqlc test server mock dockerstart dockerstop create-migration
